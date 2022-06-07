@@ -41,7 +41,7 @@ public class StudentResource {
     @PutMapping("/update")
     @CrossOrigin("http://localhost:4200")
     public ResponseEntity<Student> updateStudent( @RequestBody Student student){
-        Student updateStudent = studentService.addStudent(student);
+        Student updateStudent = studentService.updateStudent(student);
         return new ResponseEntity<>(updateStudent, HttpStatus.OK);
     }
 

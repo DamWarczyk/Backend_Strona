@@ -33,7 +33,7 @@ public class StudentService {
         return studentRepo.findStudentById(id).orElseThrow(() -> new UsernNotFoundException("User by id: " + id + "Not found"));
     }
 
-    public  void deleteStudent(Long id){
+    public void deleteStudent(Long id){
         studentRepo.deleteStudentById(id);
     }
 }
