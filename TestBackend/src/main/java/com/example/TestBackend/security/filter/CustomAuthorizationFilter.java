@@ -1,4 +1,4 @@
-package com.example.TestBackend.filter;
+package com.example.TestBackend.security.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
@@ -32,13 +32,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if (request.getServletPath().equals("/login")) {
+        if (request.getServletPath().equals("/login") || request.getServletPath().equals("/refreshToken")) {
             filterChain.doFilter(request, response);
         } else {
             String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            if (authorizationHeader != null) {
                 try {
-                    String token = authorizationHeader.substring("Bearer ".length());
+                    String token = authorizationHeader;
                     Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
                     JWTVerifier verifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = verifier.verify(token);

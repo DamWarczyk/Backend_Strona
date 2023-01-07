@@ -1,8 +1,7 @@
 package com.example.TestBackend.security;
 
-import com.example.TestBackend.filter.CustomAuthenticationFilter;
-import com.example.TestBackend.filter.CustomAuthorizationFilter;
-import lombok.AllArgsConstructor;
+import com.example.TestBackend.security.filter.CustomAuthenticationFilter;
+import com.example.TestBackend.security.filter.CustomAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import static io.swagger.models.HttpMethod.GET;
 
 @Configuration
 @EnableWebSecurity
@@ -37,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers("/login").permitAll();
+        http.authorizeRequests().antMatchers("/login/**", "/refreshToken/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/item/all/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/student/add/**").hasAuthority("ROLE_ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/student/**").hasAuthority("ROLE_USER");

@@ -46,8 +46,14 @@ public class StudentService implements UserService, UserDetailsService {
     }
 
     public Student saveStudent(Student student) {
-        student.setPassword(passwordEncoder.encode(student.getPassword()));
-        return studentRepo.save(student);
+        boolean studentExists = studentRepo.findByEmail(student.getEmail()).isPresent();
+
+        if (studentExists) {
+            throw new IllegalStateException("Email already taken");
+        } else {
+            student.setPassword(passwordEncoder.encode(student.getPassword()));
+            return studentRepo.save(student);
+        }
     }
 
     @Override

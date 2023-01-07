@@ -1,4 +1,4 @@
-package com.example.TestBackend.filter;
+package com.example.TestBackend.security.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
