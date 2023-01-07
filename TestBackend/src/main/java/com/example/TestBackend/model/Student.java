@@ -1,9 +1,21 @@
 package com.example.TestBackend.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
+import static javax.persistence.FetchType.EAGER;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Student implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -13,10 +25,10 @@ public class Student implements Serializable {
     private String surname;
     private String email;
     private String password;
+    @ManyToMany( fetch = EAGER)
+    private Collection<Role> roles = new ArrayList<>();
 
 
-    public Student() {
-    }
 
     public Student(Long id, String name, String surname, String email, String password) {
         this.id = id;
@@ -33,7 +45,6 @@ public class Student implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
     public Long getId() {
         return id;

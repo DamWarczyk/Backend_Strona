@@ -10,4 +10,6 @@ public interface StudentRepo extends JpaRepository<Student, Long> {
     void deleteStudentById(Long id);
 
     Optional<Student> findStudentById(Long id);
+
+    Student findStudentByEmail(String email);
 }
