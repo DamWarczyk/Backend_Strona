@@ -3,6 +3,7 @@ import com.example.TestBackend.model.Item;
 import  com.example.TestBackend.service.ItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,15 +38,16 @@ public class ItemResource {
         return  new ResponseEntity<>(item1, HttpStatus.CREATED);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     @CrossOrigin("http://localhost:4200")
-    public ResponseEntity<Item> updateItem( @RequestBody Item item){
-        Item updateItem = itemService.updateItem(item);
+    public ResponseEntity<Item> updateItem( @RequestBody Item item, @PathVariable Long id){
+        Item updateItem = itemService.updateItem(item, id);
         return new ResponseEntity<>(updateItem, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
     @CrossOrigin("http://localhost:4200")
+    @Transactional
     public ResponseEntity<?> deleteItem ( @PathVariable("id") Long id){
         itemService.deleteItem(id);
         return new ResponseEntity<>(HttpStatus.OK);

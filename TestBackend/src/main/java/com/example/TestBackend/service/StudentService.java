@@ -5,6 +5,7 @@ import com.example.TestBackend.model.Role;
 import com.example.TestBackend.model.Student;
 import com.example.TestBackend.repo.RoleRepo;
 import com.example.TestBackend.repo.StudentRepo;
+import com.example.TestBackend.security.PasswordValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +49,17 @@ public class StudentService implements UserService, UserDetailsService {
     public Student saveStudent(Student student) {
         boolean studentExists = studentRepo.findByEmail(student.getEmail()).isPresent();
 
+
         if (studentExists) {
             throw new IllegalStateException("Email already taken");
         } else {
-            student.setPassword(passwordEncoder.encode(student.getPassword()));
-            return studentRepo.save(student);
+            if (PasswordValidator.isValid(student.getPassword())) {
+                student.setPassword(passwordEncoder.encode(student.getPassword()));
+                return studentRepo.save(student);
+            }
+            else {
+                throw new IllegalStateException("Password don't match pattern");
+            }
         }
     }
 

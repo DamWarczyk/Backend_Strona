@@ -22,7 +22,20 @@ public class ItemService {
 
     public List<Item> findAllItem(){return itemRepo.findAll();}
 
-    public Item updateItem(Item item){return itemRepo.save(item);}
+    public Item updateItem(Item newItem, Long id){
+        return itemRepo.findById(id)
+            .map(item -> {
+                item.setOpis(newItem.getOpis());
+                item.setCena(newItem.getCena());
+                item.setName(newItem.getName());
+                item.setImageUrl(newItem.getImageUrl());
+                return itemRepo.save(item);
+            })
+            .orElseGet(() -> {
+                newItem.setId(id);
+                return itemRepo.save(newItem);
+            });
+    }
 
     public Item findItemById(Long id){
         return  itemRepo.findItemById(id).orElseThrow(() -> new UsernNotFoundException("User by id: " + id + "Not found"));
