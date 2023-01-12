@@ -52,4 +52,12 @@ public class ItemResource {
         itemService.deleteItem(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @DeleteMapping("/buyItem/{id}")
+    @CrossOrigin("http://localhost:4200")
+    @Transactional
+    public ResponseEntity<?> buyItem ( @PathVariable("id") Long id){
+        itemService.deleteItem(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

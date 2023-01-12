@@ -8,7 +8,6 @@ import com.example.TestBackend.repo.StudentRepo;
 import com.example.TestBackend.security.PasswordValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -55,9 +54,10 @@ public class StudentService implements UserService, UserDetailsService {
         } else {
             if (PasswordValidator.isValid(student.getPassword())) {
                 student.setPassword(passwordEncoder.encode(student.getPassword()));
+                Role role = roleRepo.findRoleByName("ROLE_USER");
+                student.getRoles().add(role);
                 return studentRepo.save(student);
-            }
-            else {
+            } else {
                 throw new IllegalStateException("Password don't match pattern");
             }
         }
@@ -72,7 +72,12 @@ public class StudentService implements UserService, UserDetailsService {
     public void addRoleToUser(String email, String roleName) {
         Student student = studentRepo.findStudentByEmail(email);
         Role role = roleRepo.findRoleByName(roleName);
-        student.getRoles().add(role);
+        if (student.getRoles().contains(role) || role.getName() == "") {
+            throw new IllegalStateException("User already has this role");
+        }
+        else {
+            student.getRoles().add(role);
+        }
     }
 
     @Override

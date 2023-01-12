@@ -42,4 +42,7 @@ public class ItemService {
     }
 
     public void deleteItem(Long id){itemRepo.deleteItemtById(id);}
+
+    public void buyItem(Long id){itemRepo.deleteItemtById(id);}
+
 }
